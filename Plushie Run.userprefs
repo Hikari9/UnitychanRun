@@ -1,0 +1,15 @@
+﻿<Properties>
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Accelerometer.cs">
+    <Files>
+      <File FileName="Assets\Scripts\Arduino.cs" Line="24" Column="34" />
+      <File FileName="Assets\Scripts\Rotater.cs" Line="16" Column="24" />
+      <File FileName="Assets\Scripts\Orbiting.cs" Line="33" Column="38" />
+      <File FileName="Assets\Accelerometer.cs" Line="19" Column="32" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
