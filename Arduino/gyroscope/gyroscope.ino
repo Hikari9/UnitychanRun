@@ -86,7 +86,7 @@ void loop()
   y = hy * deltaTime / 1000.0f;
   z = hz * deltaTime / 1000.0f;
   
-
+  
 
   /*Serial.print(" F=");
    Serial.print(turetemp);

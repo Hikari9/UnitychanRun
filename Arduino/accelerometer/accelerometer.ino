@@ -43,9 +43,23 @@ void loop(void){
   read_xyz();            // read ADXL345 accelerometer
 
   float sens = BYTE_MAX / g_max;
-  float gx = x / sens; // measured in g's
-  float gy = y / sens; // measured in g's
-  float gz = z / sens; // measured in g's
+  float gx, gy, gz; // acceleration vector measured in g's
+  gx = x / sens;
+  gy = y / sens;
+  gz = z / sens;
+  
+  // magnitude of acceleration vector
+  float mag = sqrt(gx * gx + gy * gy + gz * gz);
+  
+  float xang, yang, zang; // angles between axes in radians
+  xang = acos(gx / mag);
+  yang = acos(gy / mag);
+  zang = acos(gz / mag);
+  
+  float xdeg, ydeg, zdeg; // angles between axes in degrees
+  xdeg = xang * PI / 180;
+  ydeg = yang * PI / 180;
+  zdeg = zang * PI / 180;
 
   // and then send results to serial port
   // view results by using IDE Tools>Serial Monitor
