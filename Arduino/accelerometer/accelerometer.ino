@@ -39,9 +39,9 @@ void setup(void){
 void loop(void){
 
   read_xyz();            // read ADXL345 accelerometer
+  /*
 
   float gx, gy, gz; // acceleration vector measured in g's
-  // Serial.println(sens);
   gx = x;
   gy = y;
   gz = z;
@@ -52,20 +52,23 @@ void loop(void){
   gy /= mag;
   gz /= mag;
   
-  float xang, yang, zang; // angles between axes in radians
-  xang = acos(gx / mag);
-  yang = acos(gy / mag);
-  zang = acos(gz / mag);
   
-  float xdeg, ydeg, zdeg; // angles between axes in degrees
-  xdeg = xang * PI / 180;
-  ydeg = yang * PI / 180;
-  zdeg = zang * PI / 180;
+  float xang, yang, zang; // pitch, yaw, roll in radians
+  xang = atan2(gy, gz);
+  yang = atan2(gz, gx);
+  zang = atan2(gx, gy);
+  
+  float xdeg, ydeg, zdeg; // in degrees
+  xdeg = xang * 180 / PI;
+  ydeg = yang * 180 / PI;
+  zdeg = zang * 180 / PI;
+  
+  // */
 
   // and then send results to serial port
   // view results by using IDE Tools>Serial Monitor
 
-  Serial.println(String() + gx + " " + gy + " " + gz);
+  Serial.println(String() + x + " " + y + " " + z);
 
   delay(1);
 
