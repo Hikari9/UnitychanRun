@@ -12,14 +12,14 @@ public class Arduino : MonoBehaviour {
 
 	public static Vector3 accelerometer
 	{
-		get { return a == null ? Vector3.zero : a; }
+		get { return a; }
 	}
 	public static Vector3 gyroscope
 	{
-		get { return g == null ? Vector3.zero : g; }
+		get { return g; }
 	}
 
-	static Vector3 a, g;
+	static Vector3 a = Vector3.zero, g = Vector3.zero;
 	static SerialPort Serial;
 	static string buffer = "";
 
@@ -31,17 +31,21 @@ public class Arduino : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (Serial == null || !Serial.IsOpen)
-			return;
-		new Thread (Read).Start ();
+		// new Thread (Read).Start ();
+		Read ();
 		Parse ();
+		Debug.Log (buffer);
 	}
 
 	void Read() {
+		if (Serial == null || !Serial.IsOpen)
+			return;
 		buffer = Serial.ReadLine ();
 	}
 
 	void Parse() {
+		if (Serial == null || !Serial.IsOpen)
+			return;
 		try {
 			string currentBuffer = buffer;
 			string[] sp = currentBuffer.Split (' ');
@@ -50,9 +54,11 @@ public class Arduino : MonoBehaviour {
 				f[i] = float.Parse (sp[i]);
 			}
 			a = new Vector3(f[0], f[1], f[2]);
-			g = new Vector3(f[3], f[4], f[5]);
+			// g = new Vector3(f[3], f[4], f[5]);
 		}
-		catch {}
+		catch {
+			Debug.Log ("Error in parsing");
+		}
 	}
 
 }

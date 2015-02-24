@@ -12,7 +12,6 @@
 int g_offx = 120;
 int g_offy = 20;
 int g_offz = 93;
-int hx, hy, hz, turetemp;
 //initializes the gyroscope
 void initGyro()
 {
@@ -23,7 +22,7 @@ void initGyro()
    * no reset, no sleep mode
    * no standby mode
    * sample rate to = 125Hz
-   * parameter to +/- 2000 degrees/sec
+   * parameter to +/- 2000 d6egrees/sec
    * low pass filter = 5Hz
    * no interrupt
    ******************************************/
@@ -53,41 +52,51 @@ void getGyroscopeData(int * result)
 }
 //
 
-unsigned long currentTime, deltaTime;
+float startTime;
+float currentTime, deltaTime;
+
+#define TIME ((float) millis() / 1000)
+#define TOTAL_TIME (TIME - startTime)
+#define print3(x,y,z) (Serial.println(String(x) + " " + y + " " + z))
 
 void setup()
 {
   Serial.begin(9600);
   Wire.begin();
   initGyro();
-  currentTime = millis();
+  currentTime = startTime = TIME;
 }
 
+double Ex = 0, Ey = 0, Ez = 0;
+double totalTime = 0;
+// calibration for gyro at rest
+float zeroX = 103;
+float zeroY = 23;
+float zeroZ = 86;
 
-//
 void loop()
 {
-  unsigned long time = millis();
+  float time = TIME;
   deltaTime = time - currentTime;
   currentTime = time;
 
   byte addr;
   int gyro[4];
   getGyroscopeData(gyro);
-  float sensitivity = 14.375;
-  hx = gyro[0] / sensitivity; // degrees per second
-  hy = gyro[1] / sensitivity; // degrees per second
-  hz = gyro[2] / sensitivity; // degrees per second
-  turetemp = 35+ ((double) (gyro[3] + 13200)) / 280; // celcius
+  float sensitivity = 14.375f;
   
-  float x, y, z; // degrees
-  // accurate for small time differences only
-  x = hx * deltaTime / 1000.0f;
-  y = hy * deltaTime / 1000.0f;
-  z = hz * deltaTime / 1000.0f;
+  // degrees per second
+  float gx = (gyro[0] - zeroX) / sensitivity;
+  float gy = (gyro[1] - zeroY) / sensitivity;
+  float gz = (gyro[2] - zeroZ) / sensitivity;
   
+  double temperature = 35+ ((double) (gyro[3] + 13200)) / 280; // celcius
   
-
+  Ex += gx * deltaTime;
+  Ey += gy * deltaTime;
+  Ez += gz * deltaTime;
+  
+  print3(Ex, Ey, Ez);
   /*Serial.print(" F=");
    Serial.print(turetemp);
    Serial.print(' ');

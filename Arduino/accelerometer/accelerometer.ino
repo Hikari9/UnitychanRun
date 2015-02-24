@@ -18,9 +18,7 @@
 
 
 // Pin usage, change assignment if you want to
-int debugMode = 0;
-#define BYTE_MAX (1 << 15)
-const byte g_max = 2; // +/-2g (or 4, 8, 16)
+const int g_max = 16; // +/-16g (2, 4, 8, or 16)
 const byte spiclk = 13;    // connect to ADXL CLK
 const byte spimiso = 12;  // connect to ADXL DO
 const byte spimosi = 11;  // connect to ADXL DI
@@ -42,14 +40,17 @@ void loop(void){
 
   read_xyz();            // read ADXL345 accelerometer
 
-  float sens = BYTE_MAX / g_max;
   float gx, gy, gz; // acceleration vector measured in g's
-  gx = x / sens;
-  gy = y / sens;
-  gz = z / sens;
+  // Serial.println(sens);
+  gx = x;
+  gy = y;
+  gz = z;
   
   // magnitude of acceleration vector
   float mag = sqrt(gx * gx + gy * gy + gz * gz);
+  gx /= mag;
+  gy /= mag;
+  gz /= mag;
   
   float xang, yang, zang; // angles between axes in radians
   xang = acos(gx / mag);
@@ -64,7 +65,7 @@ void loop(void){
   // and then send results to serial port
   // view results by using IDE Tools>Serial Monitor
 
-  Serial.println(String() + x + " " + y + " " + z);
+  Serial.println(String() + gx + " " + gy + " " + gz);
 
   delay(1);
 
@@ -121,10 +122,16 @@ void  init_adxl(void){
   //Write to register 0x31, DATA FORMAT
   spi_out(0x31);
   // uncomment your desired range
-  //spi_out(0x0B); //full resolution, +/- 16g range
-  //spi_out(0x0A); //full resolution, +/- 8g range
-  //spi_out(0x09); //full resolution, +/- 4g range
-  spi_out(0x08); //full resolution, +/- 2g range
+  int range_hex;
+  switch (g_max) {
+    case 16: range_hex = 0x0B; break; // +/- 16g range
+    case 8: range_hex = 0x0A; break; // +/- 8g range
+    case 4: range_hex = 0x09; break; // +/- 4g range
+    case 2: range_hex = 0x08; break; // +/- 2g range
+    default: range_hex = 0x08; // default at +/- 2g range
+  }
+  
+  spi_out(range_hex);
 
   pinMode(spics,INPUT);  //CS HIGH
   delay(1);
