@@ -20,10 +20,12 @@ public class Accelerometer : MonoBehaviour {
 		Vector3 dir = cam.position - transform.position;
 		Quaternion face = Quaternion.LookRotation (dir);
 		Vector3 accel = Arduino.accelerometer;
+		Vector3 gyro = Arduino.gyroscope;
 		// transform.position += accel * strength * Time.deltaTime;
-		Quaternion nr = Quaternion.LookRotation (accel);
+		// Quaternion nr = Quaternion.LookRotation (accel);
+		Quaternion rot = Quaternion.Euler (gyro);
 		// transform.rotation = Quaternion.Slerp (transform.rotation, face * nr, Mathf.Min (1f, 2f * Time.deltaTime));
-		transform.rotation = nr * face;
+		transform.rotation = rot * face;
 	}
 
 

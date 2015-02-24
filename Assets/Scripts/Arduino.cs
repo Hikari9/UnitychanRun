@@ -7,7 +7,7 @@ using System.Threading;
 
 public class Arduino : MonoBehaviour {
 	
-	static string CommPort = "COM5";
+	static string CommPort = "COM1";
 	static int BaudRate = 9600;
 
 	public static Vector3 accelerometer
@@ -53,7 +53,7 @@ public class Arduino : MonoBehaviour {
 			for (int i = 0; i < sp.Length; ++i) {
 				f[i] = float.Parse (sp[i]);
 			}
-			a = new Vector3(f[0], f[1], f[2]);
+			g = new Vector3(-f[0], -f[2], -f[1]); // swap y and z for Unity
 			// g = new Vector3(f[3], f[4], f[5]);
 		}
 		catch {

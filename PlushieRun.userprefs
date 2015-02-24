@@ -2,7 +2,8 @@
   <MonoDevelop.Ide.Workspace />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\Arduino.cs">
     <Files>
-      <File FileName="Assets\Scripts\Arduino.cs" Line="60" Column="35" />
+      <File FileName="Assets\Scripts\Arduino.cs" Line="35" Column="11" />
+      <File FileName="Assets\Scripts\Accelerometer.cs" Line="33" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
