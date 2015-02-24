@@ -40,7 +40,12 @@ void setup(void){
 void loop(void){
 
   read_xyz();            // read ADXL345 accelerometer
-
+  
+  float sens = 16384; // at +/-2g
+  float gx = x / sens;
+  float gy = y / sens;
+  float gz = z / sens;  
+  
   // and then send results to serial port
   // view results by using IDE Tools>Serial Monitor
   
