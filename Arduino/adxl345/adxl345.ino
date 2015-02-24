@@ -111,10 +111,10 @@ void  init_adxl(void){
   //Write to register 0x31, DATA FORMAT
   spi_out(0x31);
   // uncomment your desired range
-  spi_out(0x0B); //full resolution, +/- 16g range
+  //spi_out(0x0B); //full resolution, +/- 16g range
   //spi_out(0x0A); //full resolution, +/- 8g range
   //spi_out(0x09); //full resolution, +/- 4g range
-  //spi_out(0x08); //full resolution, +/- 2g range
+  spi_out(0x08); //full resolution, +/- 2g range
   
   pinMode(spics,INPUT);  //CS HIGH
   delay(1);
