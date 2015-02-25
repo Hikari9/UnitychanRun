@@ -16,6 +16,7 @@
     
     ACCELEROMETER SETTINGS:
     Range = +/- (2g, 4g, 8g, or 16g)
+    Calibration at Zero = [editable]
     
     GYROSCOPE SETTINGS:
     Parameter = +/- 2000 (deg/sec)
@@ -58,6 +59,7 @@ float pitch, yaw, roll, temperature; // calculated values from gyroscope (deg/s 
 // user settings: change when needed
 const int BaudRate = 9600;
 const int AccelRange = 16; // +/- 2g, 4g, 8g, or 16g
+const int AccelZero[3] = {0, 0, 0}; // calibration values for when accelerometer is flat
 const int GyroZero[3] = {-14, 7, -7}; // calibration values for when gyroscope is idle
 
 // pin usage: change assignment if you want to
@@ -170,14 +172,14 @@ void getAccelerometerData() {
     // D7 = 1 for read and D6 = 1 for sequential read
     writeAccel(StartAddress);
     
-    for (int i = 0; i < AccelBytes; ++i) {
-        writeAccel(0);
+    for (int i = AccelBytes - 1; i >= 0; --i) {
+        writeAccel(0x00);
         AccelBuffer[i] = AccelData;
     }
     
-    ax = BytesToInt(AccelBuffer + 0);
-    ay = BytesToInt(AccelBuffer + 2);
-    az = BytesToInt(AccelBuffer + 4);
+    az = BytesToInt(AccelBuffer + 0) - AccelZero[2];
+    ay = BytesToInt(AccelBuffer + 2) - AccelZero[1];
+    ax = BytesToInt(AccelBuffer + 4) - AccelZero[0];
     
     pinMode(CS, INPUT);
     
