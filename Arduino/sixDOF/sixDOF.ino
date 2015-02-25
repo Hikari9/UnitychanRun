@@ -49,11 +49,10 @@
 // output from 6DOF
 int ax, ay, az; // stores acceleration vector (idle => upward)
 int gx, gy, gz, gtemp; // raw values from gyroscope
-byte raw[14]; // holds bytes of ax, ay, az, gx, gy, gz, gtemp
 float pitch, yaw, roll, temperature; // calculated values from gyroscope (deg/s and Celcius)
 
 // Serial Options
-// #define WRITE_BYTES // uncomment to write in bytes
+#define WRITE_BYTES // uncomment to write in bytes
 #define INCLUDE_TEMPERATURE // uncomment to include temperature for Serial
 
 // user settings: change when needed
@@ -93,10 +92,14 @@ void printToSerial() {
         Serial.println(String(ax) + " " + ay + " " + az + " " + pitch + " " + yaw + " " + roll);
       #endif
     #else
+      Serial.write((byte *) &ax, 2);
+      Serial.write((byte *) &ay, 2);
+      Serial.write((byte *) &az, 2);
+      Serial.write((byte *) &pitch, 4);
+      Serial.write((byte *) &yaw, 4);
+      Serial.write((byte *) &roll, 4);
       #ifdef INCLUDE_TEMPERATURE
-        Serial.write(raw, 14);
-      #else
-        Serial.write(raw, 12);
+        Serial.write((byte *) &temperature, 4);
       #endif
     #endif
 }
@@ -169,7 +172,7 @@ void getAccelerometerData() {
     
     for (int i = 0; i < AccelBytes; ++i) {
         writeAccel(0);
-        raw[i] = AccelBuffer[i] = AccelData;
+        AccelBuffer[i] = AccelData;
     }
     
     ax = BytesToInt(AccelBuffer + 0);
@@ -199,11 +202,6 @@ void getGyroscopeData() {
     readGyro(RegAddress, GyroBytes, GyroBuffer);
     
     // get raw data
-    for (int i = 2; i < GyroBytes; ++i)
-      raw[AccelBytes + i - 2] = GyroBuffer[i];
-    // temp
-    raw[AccelBytes + GyroBytes - 2] = GyroBuffer[0];
-    raw[AccelBytes + GyroBytes - 1] = GyroBuffer[1];
     
     gx = BytesToInt(GyroBuffer + 2) - GyroZero[0];
     gy = BytesToInt(GyroBuffer + 4) - GyroZero[1];
@@ -214,7 +212,7 @@ void getGyroscopeData() {
     pitch = gx / GyroSensitivity;
     yaw = gy / GyroSensitivity;
     roll = gz / GyroSensitivity;
-    temperature = 35 + ((double) (gtemp) + 13200) / 280;
+    temperature = 35 + ((float) (gtemp) + 13200) / 280;
     
 }
 

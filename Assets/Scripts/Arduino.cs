@@ -14,47 +14,56 @@ public class Arduino : MonoBehaviour {
 	{
 		get { return a; }
 	}
-	public static Vector3 gyroscope
+	public static Vector3 gyroscope // degrees per second
 	{
 		get { return g; }
 	}
+	public static Vector3 gyroangle // degrees
+	{
+		get { return gSum; }
+	}
 
 	static Vector3 a = Vector3.zero, g = Vector3.zero;
+	static Vector3 gSum = Vector3.zero;
 	static SerialPort Serial;
-	static string buffer = "";
+	const int Bytes = 22;
+	static byte[] buffer = new byte[Bytes];
+	static int ptr = 0;
 
 	// Use this for initialization
 	void Start () {
 		Serial = new SerialPort (CommPort, BaudRate);
 		Serial.Open ();
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		// new Thread (Read).Start ();
 		Read ();
 		Parse ();
-		Debug.Log (buffer);
+		// Parse ();
 	}
 
 	void Read() {
 		if (Serial == null || !Serial.IsOpen)
 			return;
-		buffer = Serial.ReadLine ();
+		int Threshold = Bytes;
+		while (Threshold-- > 0) {
+			buffer[ptr++] = (byte) Serial.ReadByte();
+			if (ptr == buffer.Length) ptr = 0;
+		}
 	}
 
 	void Parse() {
 		if (Serial == null || !Serial.IsOpen)
 			return;
+		Read ();
 		try {
-			string currentBuffer = buffer;
-			string[] sp = currentBuffer.Split (' ');
-			float[] f = new float[sp.Length];
-			for (int i = 0; i < sp.Length; ++i) {
-				f[i] = float.Parse (sp[i]);
-			}
-			g = new Vector3(-f[0], -f[2], -f[1]); // swap y and z for Unity
-			// g = new Vector3(f[3], f[4], f[5]);
+			MemoryStream ms = new MemoryStream(buffer);
+			BinaryReader br = new BinaryReader(ms);
+			a = new Vector3(br.ReadInt16 (), br.ReadInt16 (), br.ReadInt16 ());
+			g = new Vector3(br.ReadSingle (), br.ReadSingle (), br.ReadSingle());
+			gSum += g * Time.deltaTime;
 		}
 		catch {
 			Debug.Log ("Error in parsing");
