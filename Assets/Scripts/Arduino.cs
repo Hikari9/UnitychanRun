@@ -12,15 +12,24 @@ public class Arduino : MonoBehaviour {
 
 	public static Vector3 accelerometer
 	{
-		get { return a; }
+		get { return new Vector3(a.x, a.z, a.y); }
 	}
 	public static Vector3 gyroscope // degrees per second
 	{
-		get { return g; }
+		get { return new Vector3(-g.x, -g.z, -g.y); }
 	}
 	public static Vector3 gyroangle // degrees
 	{
-		get { return gSum; }
+		get {
+			if (gSum.x >= 0 && gSum.x < 360 && gSum.y >= 0 && gSum.y < 360 && gSum.z >= 0 && gSum.z < 360)
+				return gSum;
+			Vector3 ng = gSum;
+			Vector3 scale = ng / 360;
+			scale.x = scale.x - Mathf.Floor (scale.x);
+			scale.y = scale.y - Mathf.Floor (scale.y);
+			scale.z = scale.z - Mathf.Floor (scale.z);
+			return gSum = scale * 360;
+		}
 	}
 
 	static Vector3 a = Vector3.zero, g = Vector3.zero;
@@ -63,7 +72,7 @@ public class Arduino : MonoBehaviour {
 			BinaryReader br = new BinaryReader(ms);
 			a = new Vector3(br.ReadInt16 (), br.ReadInt16 (), br.ReadInt16 ());
 			g = new Vector3(br.ReadSingle (), br.ReadSingle (), br.ReadSingle());
-			gSum += g * Time.deltaTime;
+			gSum += gyroscope * Time.deltaTime;
 		}
 		catch {
 			Debug.Log ("Error in parsing");
