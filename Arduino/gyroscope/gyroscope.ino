@@ -22,7 +22,7 @@ void initGyro()
    * no reset, no sleep mode
    * no standby mode
    * sample rate to = 125Hz
-   * parameter to +/- 2000 d6egrees/sec
+   * parameter to +/- 2000 degrees/sec
    * low pass filter = 5Hz
    * no interrupt
    ******************************************/
@@ -95,7 +95,6 @@ void loop()
   Ex += gx * deltaTime;
   Ey += gy * deltaTime;
   Ez += gz * deltaTime;
-  
   print3(Ex, Ey, Ez);
   /*Serial.print(" F=");
    Serial.print(turetemp);
