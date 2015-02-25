@@ -47,15 +47,15 @@ public class Arduino : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		// new Thread (Read).Start ();
 		Read ();
 		Parse ();
-		// Parse ();
 	}
 
 	void Read() {
-		if (Serial == null || !Serial.IsOpen)
+		if (Serial == null || !Serial.IsOpen) {
+			Start ();
 			return;
+		}
 		int Threshold = Bytes;
 		while (Threshold-- > 0) {
 			buffer[ptr++] = (byte) Serial.ReadByte();
@@ -64,8 +64,10 @@ public class Arduino : MonoBehaviour {
 	}
 
 	void Parse() {
-		if (Serial == null || !Serial.IsOpen)
+		if (Serial == null || !Serial.IsOpen) {
+			Start ();
 			return;
+		}
 		Read ();
 		try {
 			MemoryStream ms = new MemoryStream(buffer);
