@@ -25,8 +25,8 @@ void setup() {
   frame.setLayout(new GridLayout(2, 1));
   
   for (int i = 0; i < accel.length; ++i) {
-    accel[i] = new TimeGraph();
-    gyro[i] = new TimeGraph();
+    accel[i] = new TimeGraph(5000, -400, 400);
+    gyro[i] = new TimeGraph(5000, -200, 200);
     accel[i].setColor(new Color(colors[i]));
     gyro[i].setColor(new Color(colors[i]));
   }
@@ -35,22 +35,23 @@ void setup() {
   frame.add(new TimeCanvas(gyro));
   frame.setVisible(true);
   // /*
-  if (serial == null)
-  new java.util.Timer(true).scheduleAtFixedRate(
-    new TimerTask() {
-      long timeStart = System.currentTimeMillis();
-      public void run() {
-        float time = (System.currentTimeMillis() - timeStart) / 1000.0f;
-        float scale = 350;
-        accel[0].put(scale * sin(time / 2));
-        accel[1].put(scale * cos(time));
-        accel[2].put(abs((time % 5) * scale / 5 - scale / 2) - scale / 4);
-        gyro[0].put(scale * sin(time * 13) * sin(time));
-        gyro[1].put(scale * cos(time) * cos(time * 5));
-        gyro[2].put(-scale * sin(time * 3) * sin(time * 2));
-      }
-    }, 2000, 1000 / TimeCanvas.FPS
-  );
+  if (serial == null) {
+    new java.util.Timer(true).scheduleAtFixedRate(
+      new TimerTask() {
+        long timeStart = System.currentTimeMillis();
+        public void run() {
+          float time = (System.currentTimeMillis() - timeStart) / 1000.0f;
+          float scale = 350;
+          accel[0].put(scale * sin(time / 2));
+          accel[1].put(scale * cos(time));
+          accel[2].put(abs((time % 5) * scale / 5 - scale / 2) - scale / 4);
+          gyro[0].put(scale * sin(time * 13) * sin(time));
+          gyro[1].put(scale * cos(time) * cos(time * 5));
+          gyro[2].put(-scale * sin(time * 3) * sin(time * 2));
+        }
+      }, 2000, 1000 / TimeCanvas.FPS
+    );
+  }
   // */
 }
 
@@ -83,6 +84,12 @@ void draw() {
     accel[0].put(ax);
     accel[1].put(ay);
     accel[2].put(az);
+    
+    gyro[0].put(pitch);
+    gyro[1].put(yaw);
+    gyro[2].put(roll);
+    
+    System.out.println(ax + " " + ay + " " + az + " " + pitch + " " + yaw + " " + roll);
   }
 }
 

@@ -1,3 +1,8 @@
+// Serial Options
+#define WRITE_BYTES // uncomment to write in bytes
+// #define RAW_GYRO // uncomment to output raw gyro data
+#define INCLUDE_TEMPERATURE // uncomment to include temperature for Serial
+
 /**
     6 Degrees of Freedom
     [Sends both gyroscope and accelerometer data to Serial]
@@ -52,15 +57,11 @@ int ax, ay, az; // stores acceleration vector (idle => upward)
 int gx, gy, gz, gtemp; // raw values from gyroscope
 float pitch, yaw, roll, temperature; // calculated values from gyroscope (deg/s and Celcius)
 
-// Serial Options
-#define WRITE_BYTES // uncomment to write in bytes
-#define INCLUDE_TEMPERATURE // uncomment to include temperature for Serial
-
 // user settings: change when needed
 const int BaudRate = 9600;
 const int AccelRange = 16; // +/- 2g, 4g, 8g, or 16g
 const int AccelZero[3] = {0, 0, 0}; // calibration values for when accelerometer is flat
-const int GyroZero[3] = {-14, 7, -7}; // calibration values for when gyroscope is idle
+const int GyroZero[3] = {-8, 5, -8}; // calibration values for when gyroscope is idle
 
 // pin usage: change assignment if you want to
 const int CLK = 13; // Serial comm clock
@@ -88,18 +89,30 @@ void loop() {
 
 void printToSerial() {
     #ifndef WRITE_BYTES
-      #ifdef INCLUDE_TEMPERATURE
-        Serial.println(String(ax) + " " + ay + " " + az + " " + pitch + " " + yaw + " " + roll + " " + temperature);
+      String toWrite = "";
+      toWrite += String(ax) + " " + ay + " " + az + " ";
+      #ifdef RAW_GYRO
+        toWrite += String(gx) + " " + gy + " " + gz;
       #else
-        Serial.println(String(ax) + " " + ay + " " + az + " " + pitch + " " + yaw + " " + roll);
+        toWrite += String(pitch) + " " + yaw + " " + roll;
       #endif
+      #ifdef INCLUDE_TEMPERATURE
+        toWrite += String(" ") + temperature;
+      #endif
+      Serial.println(toWrite);
     #else
       Serial.write((byte *) &ax, 2);
       Serial.write((byte *) &ay, 2);
       Serial.write((byte *) &az, 2);
-      Serial.write((byte *) &pitch, 4);
-      Serial.write((byte *) &yaw, 4);
-      Serial.write((byte *) &roll, 4);
+      #ifdef RAW_GYRO
+        Serial.write((byte *) &gx, 2);
+        Serial.write((byte *) &gy, 2);
+        Serial.write((byte *) &gz, 2);
+      #else
+        Serial.write((byte *) &pitch, 4);
+        Serial.write((byte *) &yaw, 4);
+        Serial.write((byte *) &roll, 4);
+      #endif
       #ifdef INCLUDE_TEMPERATURE
         Serial.write((byte *) &temperature, 4);
       #endif

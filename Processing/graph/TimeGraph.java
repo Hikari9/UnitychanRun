@@ -107,8 +107,10 @@ public class TimeGraph {
         g.setColor(color);
         g.drawPolygon(p);
         
-        int ly = (p.ypoints[p.npoints - 3]);
-        g.drawLine(0, ly, WIDTH, ly);
+        if (p.npoints >= 3) {
+          int ly = (p.ypoints[p.npoints - 3]);
+          g.drawLine(0, ly, WIDTH, ly);
+        }
     }
     
     public void setColor(Color c) {
