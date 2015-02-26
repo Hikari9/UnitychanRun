@@ -61,7 +61,7 @@ float pitch, yaw, roll, temperature; // calculated values from gyroscope (deg/s 
 const int BaudRate = 9600;
 const int AccelRange = 16; // +/- 2g, 4g, 8g, or 16g
 const int AccelZero[3] = {0, 0, 0}; // calibration values for when accelerometer is flat
-const int GyroZero[3] = {-8, 5, -8}; // calibration values for when gyroscope is idle
+const int GyroZero[3] = {-8, 5, -9}; // calibration values for when gyroscope is idle
 const boolean GyroInvert = true; // ax should increase when gy increases. If not, you should make this invert variable true
 
 // pin usage: change assignment if you want to
