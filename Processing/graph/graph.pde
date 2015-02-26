@@ -19,7 +19,7 @@ void setup() {
     serial = new Serial(this, Serial.list()[0], 9600);
   }
   
-  frame.setSize(800, 800);
+  frame.setSize(500, 400);
   frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
   frame.setResizable(true);
   frame.setLayout(new GridLayout(2, 1));

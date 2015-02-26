@@ -16,7 +16,7 @@ public class Arduino : MonoBehaviour {
 	}
 	public static Vector3 gyroscope // degrees per second
 	{
-		get { return new Vector3(-g.x, -g.z, -g.y); }
+		get { return new Vector3(g.x, g.z, g.y); }
 	}
 	public static Vector3 gyroangle // degrees
 	{
@@ -79,6 +79,11 @@ public class Arduino : MonoBehaviour {
 		catch {
 			Debug.Log ("Error in parsing");
 		}
+	}
+
+	void OnDestroy() {
+		if (Serial != null)
+			Serial.Close ();
 	}
 
 }
