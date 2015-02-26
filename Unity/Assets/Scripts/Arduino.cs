@@ -42,7 +42,18 @@ public class Arduino : MonoBehaviour {
 
 	public static Quaternion filteredAccelQuaternion
 	{
-		get { return Quaternion.FromToRotation (filteredAccelerometer, Vector3.up); }
+		get {
+			Quaternion fromTo = Quaternion.FromToRotation (filteredAccelerometer, Vector3.up);
+			return fromTo;
+			// this does not count the plane perpendicular to the look
+			/*
+			float angle;
+			Vector3 axis;
+			fromTo.ToAngleAxis (out angle, out axis);
+			angle = lookAngle;
+			return Quaternion.AngleAxis (angle, axis);
+			*/
+		}
 	}
 
 	public static Vector3 filteredAccelEuler
@@ -54,6 +65,7 @@ public class Arduino : MonoBehaviour {
 
 	static Vector3 a, g;
 	static Vector3 look;
+	static float lookAngle;
 	static SerialPort Serial;
 	const int Bytes = 22;
 	static byte[] buffer = new byte[Bytes];
@@ -67,6 +79,7 @@ public class Arduino : MonoBehaviour {
 		Read ();
 		Parse ();
 		look = accelerometer.normalized;
+		lookAngle = 0;
 		ComplementaryFilter ();
 	}
 
@@ -113,8 +126,27 @@ public class Arduino : MonoBehaviour {
 			ard.Start ();
 			return;
 		}
-		Vector3 gLook = Quaternion.Euler (gyroscope * Time.deltaTime) * look;
+		Quaternion delta = Quaternion.Euler (gyroscope * Time.deltaTime);
+		Vector3 gLook = delta * look;
 		look = (accelerometer.normalized + gLook * trustGyro) / (1 + trustGyro);
+
+		/*
+		// project degrees of delta onto look to get lookAngle
+		float deltaAngle;
+		Vector3 deltaAxis;
+		delta.ToAngleAxis (out deltaAngle, out deltaAxis);
+
+
+		// get random normal vectors
+		Vector3 deltaNormal = new Vector3 (-deltaAxis.y, deltaAxis.x).normalized;
+		Vector3 lookNormal = new Vector3 (-look.y, look.x).normalized;
+
+		// rotate deltaNormal then cast to look
+		Vector3 deltaRot = delta * deltaNormal;
+		Vector3 lookRot = deltaRot - look * Vector3.Dot (deltaRot, look);
+
+		lookAngle += Mathf.Acos (Vector3.Dot (lookNormal, lookRot));
+		*/
 	}
 
 	static Vector3 NormalizeEuler (Vector3 v) {
