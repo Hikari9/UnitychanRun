@@ -15,7 +15,7 @@ public class Accelerometer : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		transform.rotation = Arduino.filteredAccelQuaternion;
+		transform.up = Arduino.filteredAccelerometer;
 	}
 
 

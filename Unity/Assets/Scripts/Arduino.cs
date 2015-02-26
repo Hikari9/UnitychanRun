@@ -14,7 +14,7 @@ public class Arduino : MonoBehaviour {
 
 	public static Vector3 accelerometer
 	{
-		get { return new Vector3(a.x, a.z, a.y); }
+		get { return new Vector3(-a.x, a.z, -a.y); }
 	}
 	public static float gravity
 	{
@@ -44,15 +44,8 @@ public class Arduino : MonoBehaviour {
 	{
 		get {
 			Quaternion fromTo = Quaternion.FromToRotation (filteredAccelerometer, Vector3.up);
+			// problem: G-lock
 			return fromTo;
-			// this does not count the plane perpendicular to the look
-			/*
-			float angle;
-			Vector3 axis;
-			fromTo.ToAngleAxis (out angle, out axis);
-			angle = lookAngle;
-			return Quaternion.AngleAxis (angle, axis);
-			*/
 		}
 	}
 
@@ -60,12 +53,19 @@ public class Arduino : MonoBehaviour {
 	{
 		get { return filteredAccelQuaternion.eulerAngles; }
 	}
+	/*
+	public static Quaternion orientation
+	{
+		get {
+
+		}
+	}
+	*/
 
 
 
 	static Vector3 a, g;
 	static Vector3 look;
-	static float lookAngle;
 	static SerialPort Serial;
 	const int Bytes = 22;
 	static byte[] buffer = new byte[Bytes];
@@ -79,7 +79,6 @@ public class Arduino : MonoBehaviour {
 		Read ();
 		Parse ();
 		look = accelerometer.normalized;
-		lookAngle = 0;
 		ComplementaryFilter ();
 	}
 
@@ -119,7 +118,7 @@ public class Arduino : MonoBehaviour {
 	}
 
 	
-	static float trustGyro = 5f;
+	static float trustGyro = 12.5f;
 
 	static void ComplementaryFilter() {
 		if (Serial == null || !Serial.IsOpen) {
@@ -130,23 +129,6 @@ public class Arduino : MonoBehaviour {
 		Vector3 gLook = delta * look;
 		look = (accelerometer.normalized + gLook * trustGyro) / (1 + trustGyro);
 
-		/*
-		// project degrees of delta onto look to get lookAngle
-		float deltaAngle;
-		Vector3 deltaAxis;
-		delta.ToAngleAxis (out deltaAngle, out deltaAxis);
-
-
-		// get random normal vectors
-		Vector3 deltaNormal = new Vector3 (-deltaAxis.y, deltaAxis.x).normalized;
-		Vector3 lookNormal = new Vector3 (-look.y, look.x).normalized;
-
-		// rotate deltaNormal then cast to look
-		Vector3 deltaRot = delta * deltaNormal;
-		Vector3 lookRot = deltaRot - look * Vector3.Dot (deltaRot, look);
-
-		lookAngle += Mathf.Acos (Vector3.Dot (lookNormal, lookRot));
-		*/
 	}
 
 	static Vector3 NormalizeEuler (Vector3 v) {
@@ -157,9 +139,9 @@ public class Arduino : MonoBehaviour {
 	static float idleMag = 10; // degrees per second
 	static float idleTimeAllowance = 0.17f; // seconds
 	static float firstIdleTime = 0;
-	public static bool isIdle = false;
+	static bool isIdle = false;
 
-	static bool IsIdle() {
+	public static bool IsIdle() {
 		if (gyroscope.x < idleMag && gyroscope.y < idleMag && gyroscope.z < idleMag) {
 			// trigger idle
 			firstIdleTime = Time.time;
