@@ -267,8 +267,6 @@ public class ArduinoController : MonoBehaviour {
 		_characterState = CharacterState.Jumping;
 	}
 
-	bool isJumping = false;
-
 	void Update() {
 		if (!isControllable)
 			Input.ResetInputAxes();

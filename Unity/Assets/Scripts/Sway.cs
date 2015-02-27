@@ -5,13 +5,16 @@ public class Sway : MonoBehaviour {
 	
 	public float inclination = 75f;
 	public float maxDistance = 10f;
+	public float dampness = 0.5f; // smoothen sway
 	
 	float prevAngle = 0;
 	public float currentInclination {
 		get { 
+			Vector3 projected = Vector3.ProjectOnPlane (Arduino.filteredAccelerometer.normalized, Vector3.forward);
+			if (projected.magnitude < 0.3f || Arduino.filteredAccelerometer.y < 0) return prevAngle;
+
 			float angle = -Gesture.RollAngle ();
 			angle = Mathf.Max (-inclination, Mathf.Min (inclination, angle));
-			if (Arduino.filteredAccelerometer.y < 0 && Mathf.Sign (angle) != Mathf.Sign (prevAngle)) return prevAngle;
 			return prevAngle = angle;
 		}
 	}
@@ -28,6 +31,6 @@ public class Sway : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.localPosition = transform.right * displacement;
+		transform.localPosition = Vector3.Lerp (transform.localPosition, transform.right * displacement, Time.deltaTime / dampness);
 	}
 }
