@@ -48,11 +48,14 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Accelerometer.cs" />
      <Compile Include="Assets\Scripts\Arduino.cs" />
+     <Compile Include="Assets\Scripts\ArduinoCamera.cs" />
+     <Compile Include="Assets\Scripts\ArduinoController.cs" />
      <Compile Include="Assets\Scripts\ColorChanger.cs" />
      <Compile Include="Assets\Scripts\Gesture.cs" />
      <Compile Include="Assets\Scripts\Gyroscope.cs" />
      <Compile Include="Assets\Scripts\Orbiting.cs" />
      <Compile Include="Assets\Scripts\Rotater.cs" />
+     <Compile Include="Assets\Sway.cs" />
      <None Include="Assets\Standard Assets\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
      <None Include="Assets\Standard Assets\Toon Shading\Sources\Shaders\Toony-BasicOutline.shader" />

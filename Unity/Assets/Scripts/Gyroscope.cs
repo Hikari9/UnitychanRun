@@ -10,7 +10,6 @@ public class Gyroscope : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		transform.rotation *= Quaternion.Euler (Arduino.gyroscope * Time.deltaTime);
-
+		transform.rotation *= Quaternion.Euler(Arduino.gyroscope * Time.deltaTime);
 	}
 }
