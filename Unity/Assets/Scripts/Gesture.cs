@@ -50,15 +50,15 @@ public class Gesture : MonoBehaviour {
 	}
 
 	public static float RollAngle() {
-		Vector3 up = Arduino.filteredAccelerometer;
-		float sign = (up.x < 0 ? -1 : 1);
-		return sign * Vector3.Angle (Vector3.up, new Vector3 (up.x, up.y, 0));
+		float roll = Arduino.filteredAccelEuler.z;
+		if (roll > 180) roll -= 360;
+		return roll;
 	}
 
 	public static float PitchAngle() {
-		Vector3 up = Arduino.filteredAccelerometer;
-		float sign = (up.z < 0 ? -1 : 1);
-		return sign * Vector3.Angle (Vector3.up, new Vector3 (0, up.y, up.z));
+		float pitch = Arduino.filteredAccelEuler.x;
+		if (pitch > 180) pitch -= 380;
+		return pitch;
 	}
 
 	// Use this for initialization
@@ -68,6 +68,6 @@ public class Gesture : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		// Debug.Log ("Jumping = " + IsJumping () + " ::: Sliding = " + IsSliding());
+
 	}
 }

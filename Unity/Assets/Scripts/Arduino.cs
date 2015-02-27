@@ -22,7 +22,7 @@ public class Arduino : MonoBehaviour {
 	}
 	public static Quaternion accelQuaternion
 	{
-		get { return Quaternion.FromToRotation (accelerometer, Vector3.up); }
+		get { return Quaternion.FromToRotation(Vector3.up, accelerometer); }
 	}
 	public static Vector3 accelEuler
 	{
@@ -41,7 +41,7 @@ public class Arduino : MonoBehaviour {
 	public static Quaternion filteredAccelQuaternion
 	{
 		get {
-			return Quaternion.LookRotation (filteredAccelerometer);
+			return Quaternion.FromToRotation (Vector3.up, filteredAccelerometer);
 		}
 	}
 	public static Vector3 filteredAccelEuler
