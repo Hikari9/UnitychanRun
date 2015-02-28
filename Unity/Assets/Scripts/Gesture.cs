@@ -14,39 +14,19 @@ public class Gesture : MonoBehaviour {
 		return false;
 	}
 
-	static bool slideLock = false;
 	static float slideAngle = -58; // degrees
 
-	public static bool Slide() { // backward pitch
-		if (PitchAngle () < slideAngle) {
-			if (slideLock)
-				return false;
-			return slideLock = true;
-		}
-		return slideLock = false;
-	}
-
-	public static bool IsSliding() {
-		return Gesture.Slide () || slideLock;
+	public static bool IsSliding() { // backward pitch=
+		return PitchAngle () < slideAngle;
 	}
 
 	static float jumpAngle = 45; // accel should point up within range
 	static float jumpMag = 120; // when jumping up, accel magnitude approaches 0
-	static bool jumpLock = false;
-
-	public static bool Jump() {
-		Vector3 up = Arduino.filteredAccelerometer;
-		float angle = Vector3.Angle (Vector3.up, up);
-		if (angle < jumpAngle && up.magnitude < jumpMag) {
-			if (jumpLock)
-				return false;
-			return jumpLock = true;
-		}
-		return jumpLock = false;
-	}
 
 	public static bool IsJumping() {
-		return Gesture.Jump () || jumpLock;
+		Vector3 up = Arduino.filteredAccelerometer;
+		float angle = Vector3.Angle (Vector3.up, up);
+		return (angle < jumpAngle && up.magnitude < jumpMag);
 	}
 
 	public static float RollAngle() {
