@@ -13,7 +13,7 @@ public class Turn : MonoBehaviour {
 		}
 	}
 
-	float turnAngle = 75f;
+	float turnAngle = 70f;
 	public float dampness = 10f;
 
 	public bool LeftTurn() {
