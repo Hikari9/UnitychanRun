@@ -35,7 +35,7 @@ public class Turn : MonoBehaviour {
 		while (true) {
 			if (!turning) {
 				gyroangle = Vector3.zero;
-				yield return new WaitForSeconds(10f);
+				yield return new WaitForSeconds(5f);
 			}
 			else {
 				yield return new WaitForEndOfFrame();
@@ -63,7 +63,7 @@ public class Turn : MonoBehaviour {
 	void UpdateRotation() {
 
 		transform.parent.localRotation = Quaternion.Slerp (transform.parent.localRotation, target, Time.smoothDeltaTime * dampness);
-		turning = !Mathf.Approximately(0, Quaternion.Angle (transform.parent.localRotation, target));
+		turning = Mathf.Abs(Quaternion.Angle (transform.parent.localRotation, target)) > 2;
 
 	}
 
