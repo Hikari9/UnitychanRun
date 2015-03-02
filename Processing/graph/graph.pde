@@ -9,6 +9,7 @@ Serial serial = null;
 TimeGraph[] accel = new TimeGraph[3];
 TimeGraph[] gyro = new TimeGraph[3];
 int[] colors = {0xFF0000, 0x00FF00, 0x0000FF};
+int Baud = 9600;
 
 int ax, ay, az;
 float pitch, yaw, roll, temperature;
@@ -16,7 +17,7 @@ float pitch, yaw, roll, temperature;
 void setup() {
   
   if (Serial.list().length > 0) {
-    serial = new Serial(this, Serial.list()[0], 9600);
+    serial = new Serial(this, Serial.list()[0], Baud);
   }
   
   frame.setSize(500, 400);

@@ -7,48 +7,69 @@ using System.IO.Ports;
 using System.Threading;
 
 public class Arduino : MonoBehaviour {
-	
-	static string CommPort = "COM1";
+
+	// static string CommPort = SerialPort.GetPortNames()[0];
 	static int BaudRate = 9600;
 	static Arduino ard = null;
 
 	public static Vector3 accelerometer
 	{
+
 		get { return new Vector3(-a.x, a.z, -a.y); }
 	}
+
+
 	public static float gravity
 	{
+
 		get { return accelerometer.magnitude; }
 	}
+
+
 	public static Quaternion accelQuaternion
 	{
+
 		get { return Quaternion.FromToRotation(Vector3.up, accelerometer); }
 	}
+
+
 	public static Vector3 accelEuler
 	{
+
 		get { return accelQuaternion.eulerAngles; }
 	}
+
+
 	public static Vector3 gyroscope // degrees per second
 	{
+
 		get { return new Vector3(g.x, g.z, g.y); }
 	}
+
+
 	public static Vector3 filteredAccelerometer // degrees
 	{
+
 		get {
 			return look * accelerometer.magnitude;
 		}
 	}
+
+
 	public static Quaternion filteredAccelQuaternion
 	{
+
 		get {
 			return Quaternion.FromToRotation (Vector3.up, filteredAccelerometer);
 		}
 	}
+
+
 	public static Vector3 filteredAccelEuler
 	{
+
 		get { return filteredAccelQuaternion.eulerAngles; }
 	}
-
 
 	static Vector3 a, g;
 	static Vector3 look;
@@ -60,7 +81,8 @@ public class Arduino : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		ard = this;
-		Serial = new SerialPort (CommPort, BaudRate);
+		// Serial = new SerialPort ();
+		Serial = new SerialPort (SerialPort.GetPortNames()[0], BaudRate);
 		Serial.Open ();
 		Read ();
 		Parse ();

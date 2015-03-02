@@ -26,7 +26,6 @@ public class Slide : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		Debug.Log (Arduino.gyroscope.x);
 		if (IsSliding ()) {
 			StartCoroutine(UpdateRotation ());
 		}

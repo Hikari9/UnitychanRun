@@ -70,9 +70,9 @@ void setup()
 double Ex = 0, Ey = 0, Ez = 0;
 double totalTime = 0;
 // calibration for gyro at rest
-float zeroX = 103;
-float zeroY = 23;
-float zeroZ = 86;
+float zeroX = -60;
+float zeroY = 58;
+float zeroZ = -140;
 
 void loop()
 {
@@ -95,7 +95,10 @@ void loop()
   Ex += gx * deltaTime;
   Ey += gy * deltaTime;
   Ez += gz * deltaTime;
-  print3(Ex, Ey, Ez);
+  
+  // print3(gyro[0], gyro[1], gyro[2]);
+  
+   print3(Ex, Ey, Ez);
   /*Serial.print(" F=");
    Serial.print(turetemp);
    Serial.print(' ');

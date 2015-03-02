@@ -4,15 +4,15 @@ using System.Collections.Generic;
 
 public class Gesture : MonoBehaviour {
 
-	public static bool LeftTurn() {
+	// public static bool LeftTurn() {
 
-		return false;
-	}
+		// return false;
+	// }
 
-	public static bool RightTurn() {
+	// public static bool RightTurn() {
 		
-		return false;
-	}
+		// return false;
+	// }
 
 	static float slideAngle = -58; // degrees
 	static float slideAnglePerSecond = 180; // degrees per second

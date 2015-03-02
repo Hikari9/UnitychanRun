@@ -55,7 +55,9 @@
      <Compile Include="Assets\Scripts\Orbiting.cs" />
      <Compile Include="Assets\Scripts\Rotater.cs" />
      <Compile Include="Assets\Scripts\Slide.cs" />
+     <Compile Include="Assets\Scripts\SmoothRotate.cs" />
      <Compile Include="Assets\Scripts\Sway.cs" />
+     <Compile Include="Assets\Scripts\Turn.cs" />
      <None Include="Assets\Standard Assets\Toon Shading\Sources\Shaders\Toony-Basic.shader" />
      <None Include="Assets\Standard Assets\Skyboxes\_skybox info.txt" />
      <None Include="Assets\Standard Assets\Toon Shading\Sources\Shaders\Toony-BasicOutline.shader" />
