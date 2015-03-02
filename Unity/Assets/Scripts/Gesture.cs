@@ -15,9 +15,10 @@ public class Gesture : MonoBehaviour {
 	}
 
 	static float slideAngle = -58; // degrees
+	static float slideAnglePerSecond = 180; // degrees per second
 
 	public static bool IsSliding() { // backward pitch=
-		return PitchAngle () < slideAngle;
+		return -Arduino.gyroscope.x >= slideAnglePerSecond && PitchAngle () < slideAngle;
 	}
 
 	static float jumpAngle = 45; // accel should point up within range
