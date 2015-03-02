@@ -29,17 +29,29 @@ public class Slide : MonoBehaviour {
 	void Update () {
 		Debug.Log (Gesture.PitchAngle ());
 		if (IsSliding ()) {
-			StartCoroutine(UpdateRotation());
+			// StartCoroutine(UpdateRotation());
+			StartCoroutine(UpdateRotation ());
 		}
-		UpdateRotation ();
 	}
 
 	IEnumerator UpdateRotation() {
-		transform.localRotation *= Quaternion.Slerp (Quaternion.identity, slideRotation, 1);
-		yield return new WaitForSeconds(fadeTime * slideTime);
-		yield return new WaitForSeconds((1 - fadeTime * 2) * slideTime);
-		transform.localRotation *= Quaternion.Slerp (slideRotation, Quaternion.identity, 1);
-		yield return null;
+		// transform.localRotation *= Quaternion.Slerp (Quaternion.identity, slideRotation, 1);
+		float startTime = Time.time;
+		float fade = fadeTime * slideTime;
+		while (Time.time - startTime < fade) {
+			float diff = Time.time - startTime;
+			transform.localRotation = Quaternion.Slerp (Quaternion.identity, slideRotation, diff / fade);
+			yield return new WaitForEndOfFrame();
+		}
+		transform.localRotation = slideRotation;
+		yield return new WaitForSeconds (slideTime - fade * 2);
+		startTime += slideTime - fade;
+		while (Time.time - startTime < fade) {
+			float diff = Time.time - startTime;
+			transform.localRotation = Quaternion.Slerp (slideRotation, Quaternion.identity, diff / fade);
+			yield return new WaitForEndOfFrame();
+		}
+		transform.localRotation = Quaternion.identity;
 	}
 
 }
