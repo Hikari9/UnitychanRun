@@ -38,10 +38,12 @@ public class Slide : MonoBehaviour {
 		
 		ArduinoController con = GetComponentInParent<ArduinoController> ();
 		AnimationClip prevAnimation = con.runAnimation;
+		float prevAnimationSpeed = con.runMaxAnimationSpeed;
 
 		// set animation to sliding
 		if (slideAnimation != null) {
 			con.runAnimation = slideAnimation;
+			con.runMaxAnimationSpeed = slideAnimation.length / slideTime;
 		}
 		con.canJump = false;
 
@@ -51,23 +53,24 @@ public class Slide : MonoBehaviour {
 
 		while (Time.time - startTime < fade) {
 			float diff = Time.time - startTime;
-			transform.localRotation = Quaternion.Slerp (Quaternion.identity, slideRotation, diff / fade);
+			// transform.localRotation = Quaternion.Slerp (Quaternion.identity, slideRotation, diff / fade);
 			yield return new WaitForEndOfFrame();
 		}
-		transform.localRotation = slideRotation;
+		// transform.localRotation = slideRotation;
 		yield return new WaitForSeconds (slideTime - fade * 2);
 		startTime += slideTime - fade;
 		while (Time.time - startTime < fade) {
 			float diff = Time.time - startTime;
-			transform.localRotation = Quaternion.Slerp (slideRotation, Quaternion.identity, diff / fade);
+			// transform.localRotation = Quaternion.Slerp (slideRotation, Quaternion.identity, diff / fade);
 			yield return new WaitForEndOfFrame();
 		}
-		transform.localRotation = Quaternion.identity;
+		// transform.localRotation = Quaternion.identity;
 
 		// return run animation
 
 		if (slideAnimation != null) {
 			con.runAnimation = prevAnimation;
+			con.runMaxAnimationSpeed = prevAnimationSpeed;
 		}
 		
 		con.canJump = true;
