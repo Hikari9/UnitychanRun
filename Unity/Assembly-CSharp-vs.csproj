@@ -84,7 +84,7 @@
      <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_hada.shader" />
      <None Include="Assets\UnityChan\Models\UnityChanShader\Shader\Unitychan_chara_hada_blend.shader" />
  <Reference Include="Assembly-UnityScript-firstpass">
- <HintPath>B:/Rico/Dev/GitHub/PlushieRun/Unity/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ <HintPath>D:/GitHub/PlushieRun/Unity/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
  </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>C:/Program Files (x86)/Unity/Editor/Data/UnityExtensions/Unity/GUISystem/4.6.0/UnityEngine.UI.dll</HintPath>
