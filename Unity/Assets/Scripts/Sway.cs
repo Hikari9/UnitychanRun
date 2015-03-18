@@ -31,6 +31,6 @@ public class Sway : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.localPosition = Vector3.Lerp (transform.localPosition, transform.right * displacement, Time.deltaTime / dampness);
+		transform.localPosition = Vector3.Lerp (transform.localPosition, transform.localRotation * Vector3.right * displacement, Time.deltaTime / dampness);
 	}
 }
