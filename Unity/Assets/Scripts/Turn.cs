@@ -13,7 +13,7 @@ public class Turn : MonoBehaviour {
 		}
 	}
 
-	float turnAngle = 70f;
+	float turnAngle = 50f;
 	public float dampness = 10f;
 
 	public bool LeftTurn() {
@@ -63,7 +63,7 @@ public class Turn : MonoBehaviour {
 	void UpdateRotation() {
 
 		transform.parent.localRotation = Quaternion.Slerp (transform.parent.localRotation, target, Time.smoothDeltaTime * dampness);
-		turning = Mathf.Abs(Quaternion.Angle (transform.parent.localRotation, target)) > 2;
+		turning = Mathf.Abs(Quaternion.Angle (transform.parent.localRotation, target)) > 1;
 
 	}
 

@@ -31,6 +31,7 @@ public class Sway : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		transform.localPosition = Vector3.Lerp (transform.localPosition, transform.localRotation * Vector3.right * displacement, Time.deltaTime / dampness);
+		
+		transform.GetComponentInParent<CharacterController>().center = transform.localPosition = Vector3.Lerp (transform.localPosition, transform.localRotation * Vector3.right * displacement, Time.deltaTime / dampness);
 	}
 }
