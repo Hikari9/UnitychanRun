@@ -21,6 +21,7 @@ public class ArduinoController : MonoBehaviour {
 		landAnimationSpeed = 1f;
 
 	private Animation _animation;
+    public bool enableAnimation = true;
 
 	enum CharacterState {
 		Idle = 0,
@@ -294,7 +295,7 @@ public class ArduinoController : MonoBehaviour {
 		collisionFlags = controller.Move(movement);
 
 		// Animation
-		if (_animation) {
+		if (_animation && enableAnimation) {
 			if(_characterState == CharacterState.Jumping) {
 				if(!jumpingReachedApex) {
 					_animation[jumpPoseAnimation.name].speed = jumpAnimationSpeed;
