@@ -10,12 +10,13 @@ public class Arduino : MonoBehaviour {
 
 	// static string CommPort = SerialPort.GetPortNames()[0];
 	static int BaudRate = 9600;
-	static Arduino ard = null;
 
 	public static Vector3 accelerometer
 	{
-
-		get { return new Vector3(-a.x, a.z, -a.y); }
+		get {
+			if (!connected) return Vector3.up * 256;
+			return new Vector3(-a.x, a.z, -a.y);
+		}
 	}
 
 
@@ -43,7 +44,10 @@ public class Arduino : MonoBehaviour {
 	public static Vector3 gyroscope // degrees per second
 	{
 
-		get { return new Vector3(g.x, g.z, g.y); }
+		get {
+			if (!connected) return Vector3.zero;
+			return new Vector3(g.x, g.z, g.y);
+		}
 	}
 
 
@@ -51,6 +55,7 @@ public class Arduino : MonoBehaviour {
 	{
 
 		get {
+			if (!connected) return Vector3.up * 256;
 			return look * accelerometer.magnitude;
 		}
 	}
@@ -78,61 +83,101 @@ public class Arduino : MonoBehaviour {
 	static byte[] buffer = new byte[Bytes];
 	static int ptr = 0;
 
-	// Use this for initialization
-	void Start () {
-		ard = this;
-		// Serial = new SerialPort ();
-		Serial = new SerialPort (SerialPort.GetPortNames()[0], BaudRate);
-		Serial.Open ();
-		Read ();
-		Parse ();
-		look = accelerometer.normalized;
-		ComplementaryFilter ();
+	static bool connected = false;
+	static bool preparing = false;
+
+	static void OnException(Exception ex) {
+		Debug.LogException (ex);
+		connected = false;
+		if (Serial != null)
+			Serial.Close ();
+	}
+
+	static void Prepare() {
+		preparing = true;
+		try {
+			Debug.Log ("Getting ports...");
+			string[] ports = SerialPort.GetPortNames();
+
+			if (ports == null || ports.Length == 0) {
+				throw new IOException("No ports available");
+			}
+
+			Debug.Log ("Creating Serial...");
+			Serial = new SerialPort();
+
+			
+			Serial.PortName = ports[0];
+			Serial.BaudRate = BaudRate;
+			Serial.Parity = Parity.None;
+			Serial.StopBits = StopBits.One;
+			Serial.ReadTimeout = BaudRate;
+
+			Debug.Log ("Checking if serial is open...");
+			if (Serial.IsOpen) {
+				Debug.Log ("Serial indeed open. Closing before proceeding...");
+				Serial.Close ();
+			}
+
+			Debug.Log ("Opening Serial...");
+			Serial.Open ();
+
+			Debug.Log ("Reading initial data...");
+
+			Read ();
+			Parse ();
+			look = accelerometer.normalized;
+			ComplementaryFilter ();
+			connected = true;
+
+			Debug.Log ("Connected!");
+		}
+		catch (Exception ex) {
+			OnException (ex);
+		}
+		preparing = false;
 	}
 
 	// Update is called once per frame
 	void Update () {
-		Read ();
-		Parse ();
-		ComplementaryFilter ();
+		if (preparing) return;
+		if (!connected) {
+			Prepare ();
+		}
+		else {
+			try {
+				Read ();
+				Parse ();
+				ComplementaryFilter ();
+			}
+			catch (Exception ex) {
+				OnException (ex);
+			}
+		}
 	}
 
 	static void Read() {
-		if (Serial == null || !Serial.IsOpen) {
-			ard.Start ();
-			return;
-		}
 		int Threshold = Bytes;
 		while (Threshold-- > 0) {
-			buffer[ptr++] = (byte) Serial.ReadByte();
+			int r = Serial.ReadByte ();
+			if (r < 0)
+				throw new IOException("No byte to read: " + r);
+			buffer[ptr++] = (byte) r;
 			if (ptr == buffer.Length) ptr = 0;
 		}
 	}
 
 	static void Parse() {
-		if (Serial == null || !Serial.IsOpen) {
-			ard.Start ();
-			return;
-		}
-		try {
-			MemoryStream ms = new MemoryStream(buffer);
-			BinaryReader br = new BinaryReader(ms);
-			a = new Vector3(br.ReadInt16 (), br.ReadInt16 (), br.ReadInt16 ());
-			g = new Vector3(br.ReadSingle (), br.ReadSingle (), br.ReadSingle());
-		}
-		catch {
-			Debug.Log ("Error in parsing");
-		}
+		MemoryStream ms = new MemoryStream(buffer);
+		BinaryReader br = new BinaryReader(ms);
+		a = new Vector3(br.ReadInt16 (), br.ReadInt16 (), br.ReadInt16 ());
+		g = new Vector3(br.ReadSingle (), br.ReadSingle (), br.ReadSingle());
 	}
 
 	
 	static float trustGyro = 5f;
 
 	static void ComplementaryFilter() {
-		if (Serial == null || !Serial.IsOpen) {
-			ard.Start ();
-			return;
-		}
 		Quaternion delta = Quaternion.Euler (gyroscope * Time.deltaTime);
 		Vector3 gLook = delta * look;
 		look = (accelerometer.normalized + gLook * trustGyro) / (1 + trustGyro);
@@ -162,6 +207,12 @@ public class Arduino : MonoBehaviour {
 	}
 
 	void OnApplicationQuit() {
+		if (Serial != null)
+			Serial.Close ();
+	}
+
+	public static void Close() {
+		connected = false;
 		if (Serial != null)
 			Serial.Close ();
 	}
