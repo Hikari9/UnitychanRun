@@ -5,7 +5,7 @@
 using UnityEngine;
 using System.Collections;
 
-[ExecuteInEditMode]
+// [ExecuteInEditMode]
 public class TextureTilingController : MonoBehaviour {
 	
 	// Give us the texture so that we can scale proportianally the width according to the height variable below
@@ -45,6 +45,6 @@ public class TextureTilingController : MonoBehaviour {
 		// Figure out texture-to-mesh width based on user set texture-to-mesh height
 		float textureToMeshX = ((float)this.texture.width/this.texture.height)*this.textureToMeshZ;
 		
-		gameObject.renderer.material.mainTextureScale = new Vector2(planeSizeX*gameObject.transform.lossyScale.x/textureToMeshX, planeSizeZ*gameObject.transform.lossyScale.z/textureToMeshZ);
+		gameObject.renderer.sharedMaterial.mainTextureScale = new Vector2(planeSizeX*gameObject.transform.lossyScale.x/textureToMeshX, planeSizeZ*gameObject.transform.lossyScale.z/textureToMeshZ);
 	}
 }

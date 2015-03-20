@@ -17,7 +17,7 @@ public class ChildTextureTiler : MonoBehaviour {
 			foreach (Object o in child.GetComponents<TextureTilingController>())
 				DestroyImmediate (o);
 			var textureController = child.gameObject.AddComponent<TextureTilingController>();
-			textureController.texture = child.renderer.sharedMaterials[0].mainTexture;
+			textureController.texture = child.renderer.sharedMaterial.mainTexture;
 			textureController.textureToMeshZ = scale;
 			textureController.UpdateTiling();
 		}
