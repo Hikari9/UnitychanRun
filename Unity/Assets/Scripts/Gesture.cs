@@ -4,6 +4,8 @@ using System.Collections.Generic;
 
 public class Gesture : MonoBehaviour {
 
+	/// Refer to Turn Script
+
 	// public static bool LeftTurn() {
 
 		// return false;
