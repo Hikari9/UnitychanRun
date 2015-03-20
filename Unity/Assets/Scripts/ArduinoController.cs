@@ -45,6 +45,7 @@ public class ArduinoController : MonoBehaviour {
 		trotAfterSeconds = 3f;
 
 	public bool canJump = true;
+	public bool allowArrowKeys = true;
 
 	private float
 		jumpRepeatTime = 0.05f,
@@ -272,7 +273,7 @@ public class ArduinoController : MonoBehaviour {
 		if (!isControllable)
 			Input.ResetInputAxes();
 
-		if (Gesture.IsJumping ()) {
+		if (Gesture.IsJumping () || (allowArrowKeys && Input.GetKeyDown (KeyCode.UpArrow))) {
 			lastJumpButtonTime = Time.time;
 		}
 

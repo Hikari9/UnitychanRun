@@ -13,15 +13,22 @@ public class Turn : MonoBehaviour {
 		}
 	}
 
-	float turnAngle = 50f;
+	public float turnAngle = 50f;
 	public float dampness = 10f;
+	public bool allowArrowKeys = true;
 
 	public bool LeftTurn() {
-		return gyroangle.y < -turnAngle;
+		bool flag = (gyroangle.y < -turnAngle);
+		if (allowArrowKeys)
+			flag |= Input.GetKeyDown (KeyCode.LeftArrow);
+		return flag;
 	}
 
 	public bool RightTurn() {
-		return gyroangle.y > turnAngle;
+		bool flag = (gyroangle.y > turnAngle);
+		if (allowArrowKeys)
+			flag |= Input.GetKeyDown (KeyCode.RightArrow);
+		return flag;
 	}
 
 	Quaternion target = Quaternion.identity;

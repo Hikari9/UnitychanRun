@@ -5,6 +5,7 @@ public class Slide : MonoBehaviour {
 
 	public float slideTime = 3f;
 	public AnimationClip slideAnimation = null;
+	public bool allowArrowKeys = true;
 
 	Quaternion slideRotation = Quaternion.FromToRotation (Vector3.up, Vector3.back);
 
@@ -18,7 +19,7 @@ public class Slide : MonoBehaviour {
 
 	bool IsSliding() {
 		if (slideLock) return false;
-		return !Gesture.IsJumping () && Gesture.IsSliding ();
+		return (!Gesture.IsJumping () && Gesture.IsSliding ()) || (allowArrowKeys && Input.GetKeyDown (KeyCode.DownArrow));
 	}
 
 
