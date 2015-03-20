@@ -82,7 +82,10 @@ public class Arduino : MonoBehaviour {
 	void Start () {
 		ard = this;
 		// Serial = new SerialPort ();
+		if (SerialPort.GetPortNames ().Length == 0)
+			return;
 		Serial = new SerialPort (SerialPort.GetPortNames()[0], BaudRate);
+		Serial.ReadTimeout = BaudRate;
 		Serial.Open ();
 		Read ();
 		Parse ();

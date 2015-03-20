@@ -49,6 +49,7 @@
      <Compile Include="Assets\Scripts\Accelerometer.cs" />
      <Compile Include="Assets\Scripts\Arduino.cs" />
      <Compile Include="Assets\Scripts\ArduinoController.cs" />
+     <Compile Include="Assets\Scripts\ChildTextureTiler.cs" />
      <Compile Include="Assets\Scripts\ColorChanger.cs" />
      <Compile Include="Assets\Scripts\Fall.cs" />
      <Compile Include="Assets\Scripts\FixedPosition.cs" />
@@ -59,6 +60,7 @@
      <Compile Include="Assets\Scripts\Slide.cs" />
      <Compile Include="Assets\Scripts\SmoothRotate.cs" />
      <Compile Include="Assets\Scripts\Sway.cs" />
+     <Compile Include="Assets\Scripts\TextureTilingController.cs" />
      <Compile Include="Assets\Scripts\Turn.cs" />
      <Compile Include="Assets\UnityChan\Scripts\CameraController.cs" />
      <Compile Include="Assets\UnityChan\Scripts\FaceUpdate.cs" />
