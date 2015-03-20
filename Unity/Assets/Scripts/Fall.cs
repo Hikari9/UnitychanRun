@@ -35,6 +35,7 @@ public class Fall : MonoBehaviour {
 
 	IEnumerator Restart() {
 		yield return new WaitForSeconds(2.5f);
+		BroadcastMessage ("DisplayFinal");
 		Application.LoadLevel ("main");
 	}
 }
