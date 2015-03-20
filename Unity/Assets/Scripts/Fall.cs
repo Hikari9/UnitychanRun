@@ -28,13 +28,7 @@ public class Fall : MonoBehaviour {
 				animation[fallingAnimation.name].speed = animationSpeed; // barely move animation
                 GetComponentInParent<ArduinoController>().enableAnimation = false; // disable controller animation
                 animation.CrossFade(fallingAnimation.name);
-				StartCoroutine (Restart());
             }
         }
-	}
-
-	IEnumerator Restart() {
-		yield return new WaitForSeconds(2.5f);
-		Application.LoadLevel ("main");
 	}
 }
