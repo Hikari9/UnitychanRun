@@ -24,10 +24,10 @@ public class Fall : MonoBehaviour {
 
             // set animation to falling animation
             if (fallingAnimation != null) {
-				animation[fallingAnimation.name].time = animationStartTime; // set at jump peak animation
-				animation[fallingAnimation.name].speed = animationSpeed; // barely move animation
+				GetComponent<Animation>()[fallingAnimation.name].time = animationStartTime; // set at jump peak animation
+				GetComponent<Animation>()[fallingAnimation.name].speed = animationSpeed; // barely move animation
                 GetComponentInParent<ArduinoController>().enableAnimation = false; // disable controller animation
-                animation.CrossFade(fallingAnimation.name);
+                GetComponent<Animation>().CrossFade(fallingAnimation.name);
 				StartCoroutine (Restart());
             }
         }

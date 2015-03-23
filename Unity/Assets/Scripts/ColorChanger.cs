@@ -25,7 +25,7 @@ public class ColorChanger : MonoBehaviour {
 			// create a new material
 			materialColored = new Material(Shader.Find ("Diffuse"));
 			materialColored.color = currentColor = color;
-			this.renderer.material = materialColored;
+			this.GetComponent<Renderer>().material = materialColored;
 		}
 	}
 }
