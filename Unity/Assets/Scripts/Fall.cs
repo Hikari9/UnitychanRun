@@ -34,7 +34,8 @@ public class Fall : MonoBehaviour {
 	}
 
 	IEnumerator Restart() {
-		yield return new WaitForSeconds(1.5f);
+		GetComponent<HUD> ().End ();
+		yield return new WaitForSeconds(2.5f);
 		Application.LoadLevel ("main");
 	}
 }

@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\FixedPosition.cs" />
      <Compile Include="Assets\Scripts\Gesture.cs" />
      <Compile Include="Assets\Scripts\Gyroscope.cs" />
+     <Compile Include="Assets\Scripts\HUD.cs" />
      <Compile Include="Assets\Scripts\Orbiting.cs" />
      <Compile Include="Assets\Scripts\Rotater.cs" />
      <Compile Include="Assets\Scripts\Slide.cs" />
