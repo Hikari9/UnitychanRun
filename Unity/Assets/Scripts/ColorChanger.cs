@@ -18,9 +18,10 @@ public class ColorChanger : MonoBehaviour {
 	void Update () {
 		if (color != currentColor) {
 			// stop the leaks
+			#if UNITY_EDITOR
 			if (materialColored != null)
 				UnityEditor.AssetDatabase.DeleteAsset(UnityEditor.AssetDatabase.GetAssetPath(materialColored));
-
+			#endif
 			// create a new material
 			materialColored = new Material(Shader.Find ("Diffuse"));
 			materialColored.color = currentColor = color;
